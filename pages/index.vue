@@ -161,6 +161,7 @@ export default Vue.extend({
 	padding: 8px;
 	white-space: pre-wrap;
 	overflow: auto;
+	line-height: 1.2;
 	height: 100%;
 }
 .bars_content {

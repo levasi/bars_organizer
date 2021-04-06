@@ -5,6 +5,4 @@
 </template>
 
 <style>
-.default_layout {
-}
 </style>
