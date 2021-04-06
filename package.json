@@ -8,7 +8,7 @@
 		"start": "nuxt start",
 		"generate": "nuxt generate",
 		"test": "jest",
-		"heroku-postbuild": "npm run build"
+		"heroku-postbuild": "nuxt build"
 	},
 	"dependencies": {
 		"@nuxtjs/firebase": "^7.5.0",
