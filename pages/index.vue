@@ -2,7 +2,6 @@
 	<div class="bars_wrapper">
 
 		<div class="bars_sidebar">
-			<h1 class="text-center">Poems</h1>
 			<ul class="bars_list">
 				<li
 					v-for="(poem, index) in poems"
@@ -36,11 +35,27 @@
 					</div>
 				</li>
 			</ul>
-			<b-button @click="addPoem">Add poem</b-button>
+			<div class="sidebar_bottom">
+				<b-button @click="addPoem">+</b-button>
+			</div>
 		</div>
 		<div class="bars_content">
 			<div class="bars_content_top">
-
+				<b-button @click="savePoem">
+					<b-spinner
+						small
+						v-if="savingPoem"
+						type="grow"
+					></b-spinner>
+					Save
+				</b-button>
+				<b-form-input
+					v-model="searchText"
+					placeholder="Enter your name"
+				></b-form-input>
+				<b-button @click="searchInAll">
+					Find
+				</b-button>
 			</div>
 			<div
 				contenteditable
@@ -50,16 +65,6 @@
 				ref="PoemContent"
 				v-html="activePoem.bars"
 			>
-			</div>
-			<div class="bars_poem_actions">
-				<b-button @click="savePoem">
-					<b-spinner
-						small
-						v-if="savingPoem"
-						type="grow"
-					></b-spinner>
-					Save poem
-				</b-button>
 			</div>
 		</div>
 	</div>
@@ -79,10 +84,18 @@ export default Vue.extend({
 			},
 			activePoem: "",
 			savingPoem: null,
-			savingTitle: null
+			savingTitle: null,
+			searchText: null
 		}
 	},
 	methods: {
+		searchInAll () {
+			this.poems.forEach(poem => {
+				if (poem.bars.indexOf(this.searchText) > 0) {
+					console.log(poem.title);
+				}
+			})
+		},
 		savePoem () {
 			this.savingPoem = true
 			const poem = this.$fire.firestore.collection("poems").doc(this.activePoem.id)
@@ -156,6 +169,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+.bars_content_top {
+	box-shadow: 0px 0px 8px lightgray;
+	padding: 8px;
+	display: flex;
+}
 .bars_content_div {
 	column-count: 3;
 	padding: 8px;
@@ -179,7 +197,6 @@ export default Vue.extend({
 	width: 100%;
 	display: block;
 	padding: 8px;
-	background-color: silver;
 }
 .bars_wrapper {
 	display: flex;
@@ -211,6 +228,18 @@ export default Vue.extend({
 	padding: 8px;
 	width: 25%;
 	height: 100vh;
-	background-color: gray;
+	box-shadow: 0px 0px 8px lightgray;
+	position: relative;
+}
+.sidebar_bottom {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0px 0px 8px lightgray;
 }
 </style>

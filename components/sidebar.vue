@@ -55,6 +55,5 @@ export default {
 .bars_sidebar {
 	width: 25%;
 	height: 100vh;
-	background-color: gray;
 }
 </style>
