@@ -16,7 +16,9 @@
 		"bootstrap-vue": "^2.21.2",
 		"core-js": "^3.9.1",
 		"firebase": "^8.3.2",
-		"nuxt": "^2.15.3"
+		"material-design-icons": "^3.0.1",
+		"nuxt": "^2.15.3",
+		"nuxt-material-design-icons": "^1.0.4"
 	},
 	"devDependencies": {
 		"@nuxt/types": "^2.15.3",

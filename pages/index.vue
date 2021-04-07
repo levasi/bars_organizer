@@ -1,60 +1,92 @@
 <template>
 	<div class="bars_wrapper">
-
 		<div class="bars_sidebar">
 			<ul class="bars_list">
 				<li
 					v-for="(poem, index) in poems"
 					:key="index"
-					class="d-flex flex-column"
+					class="d-flex"
+					@click="setActivePoem(poem)"
 					:class="{['active_sidebar_item']:poem.id === activePoem.id}"
 				>
-
-					<h5
-						class="d-block"
+					<p
+						class="d-block title"
 						contenteditable
-						@click="setActivePoem(poem)"
 						v-html="poem.title"
 						:ref="poem.id"
 						spellcheck="false"
 					>
-
-					</h5>
+					</p>
 					<div>
-
-						<b-button @click="saveTitle">
+						<b-button
+							size="sm"
+							@click.stop="saveTitle"
+							variant="success"
+						>
 							<b-spinner
 								small
 								v-if="savingTitle && poem.id === activePoem.id"
 								type="grow"
 							></b-spinner>
-							Save title
+							<span
+								v-else
+								class="material-icons"
+							>done</span>
 						</b-button>
-						<b-button @click="removePoem(poem.id)">X</b-button>
+						<b-button
+							size="sm"
+							variant="warning"
+							@click.stop="removePoem(poem.id)"
+						>
+							<span class="material-icons">
+								delete
+							</span>
+						</b-button>
 
 					</div>
 				</li>
 			</ul>
 			<div class="sidebar_bottom">
-				<b-button @click="addPoem">+</b-button>
+				<b-button
+					@click="addPoem"
+					variant="success"
+					size="sm"
+					class="cursor-pointer"
+				>
+					<span class="material-icons">
+						add
+					</span>
+				</b-button>
 			</div>
 		</div>
 		<div class="bars_content">
 			<div class="bars_content_top">
-				<b-button @click="savePoem">
+				<b-button
+					@click="savePoem"
+					variant="success"
+					size="sm"
+				>
 					<b-spinner
 						small
 						v-if="savingPoem"
 						type="grow"
 					></b-spinner>
-					Save
+					<span class="material-icons">
+						check
+					</span>
 				</b-button>
 				<b-form-input
 					v-model="searchText"
-					placeholder="Enter your name"
+					placeholder="Search in all ..."
 				></b-form-input>
-				<b-button @click="searchInAll">
-					Find
+				<b-button
+					variant="success"
+					size="sm"
+					@click="searchInAll"
+				>
+					<span class="material-icons cl-c3">
+						arrow_forward
+					</span>
 				</b-button>
 			</div>
 			<div
@@ -97,14 +129,17 @@ export default Vue.extend({
 			})
 		},
 		savePoem () {
-			this.savingPoem = true
-			const poem = this.$fire.firestore.collection("poems").doc(this.activePoem.id)
-			var setWithMerge = poem.set({
-				bars: this.$refs.PoemContent.textContent
-			}, { merge: true })
-				.then(response => {
-					this.savingPoem = false
-				});
+			if (this.$refs.PoemContent.textContent !== this.activePoem.bars) {
+				this.savingPoem = true
+				const poem = this.$fire.firestore.collection("poems").doc(this.activePoem.id)
+				poem.set({
+					bars: this.$refs.PoemContent.textContent
+				}, { merge: true })
+					.then(() => {
+						this.savingPoem = false
+					});
+				// TODO: update local poem
+			}
 		},
 		saveTitle () {
 			if (this.activePoem) {
@@ -169,6 +204,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+[contenteditable] {
+	outline: 0px solid transparent;
+}
 .bars_content_top {
 	box-shadow: 0px 0px 8px lightgray;
 	padding: 8px;
@@ -207,18 +245,14 @@ export default Vue.extend({
 	}
 	list-style-type: none;
 	li {
+		padding: 4px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 8px;
-
 		cursor: pointer;
 		transition: all 0.2s ease-in-out;
 		border-radius: 4px;
-		h5 {
-			width: 100%;
-			padding: 4px;
-		}
 		&:hover {
 			background-color: lightgreen;
 		}

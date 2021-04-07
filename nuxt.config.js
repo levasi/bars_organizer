@@ -14,10 +14,10 @@ export default {
 			{ hid: 'description', name: 'description', content: '' }
 		],
 		link: [
-			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Material+Icons' }
 		]
 	},
-
 	// Global CSS: https://go.nuxtjs.dev/config-css
 	css: [
 		'~/assets/main.scss',
@@ -39,6 +39,7 @@ export default {
 	// Modules: https://go.nuxtjs.dev/config-modules
 	modules: [
 		// https://go.nuxtjs.dev/bootstrap
+		'nuxt-material-design-icons',
 		'bootstrap-vue/nuxt',
 		[
 			'@nuxtjs/firebase',
